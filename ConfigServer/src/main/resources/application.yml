@@ -8,5 +8,5 @@ spring:
     config:
       server:
         git:
-          uri:  https://github.com/arun1791/microservice-tutorial-config
+          uri: https://github.com/arun1791/microservice-tutorial-config
           clone-on-start: true
