@@ -4,6 +4,8 @@ import com.userservice.com.enities.User;
 import com.userservice.com.service.UserService;
 import com.userservice.com.service.impl.UserServiceImpl;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,17 +32,23 @@ public class UserController {
 
 
     //get user
-
+    int retryCount=1;
     @GetMapping("/{userId}")
-    @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
+   // @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
+   // @Retry(name = "ratingHotelService",fallbackMethod = "ratingHotelFallback")
+    @RateLimiter(name = "userRatelimiter" , fallbackMethod = "ratingHotelFallback")
     public  ResponseEntity<User> getSignleUser( @PathVariable String userId){
+        logger.info("Retry count {}"+retryCount);
+        retryCount++;
        User user= userService.getUser(userId);
        return ResponseEntity.ok(user);
     }
 
     //creaing cercit breaker fall back method
     public  ResponseEntity<User> ratingHotelFallback(String userId,Exception ex){
-        logger.info("Fallback is excuted becuse service is down ",ex.getMessage());
+//        logger.info("Fallback is excuted becuse service is down ",ex.getMessage());
+
+
         User user=User.builder()
                 .email("dummy@gamail.com")
                 .name("dummy")
