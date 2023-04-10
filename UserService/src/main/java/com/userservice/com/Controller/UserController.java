@@ -32,14 +32,14 @@ public class UserController {
 
 
     //get user
-    int retryCount=1;
+    //int retryCount=1;
     @GetMapping("/{userId}")
    // @CircuitBreaker(name = "ratingHotelBreaker", fallbackMethod = "ratingHotelFallback")
    // @Retry(name = "ratingHotelService",fallbackMethod = "ratingHotelFallback")
     @RateLimiter(name = "userRatelimiter" , fallbackMethod = "ratingHotelFallback")
     public  ResponseEntity<User> getSignleUser( @PathVariable String userId){
-        logger.info("Retry count {}"+retryCount);
-        retryCount++;
+        //logger.info("Retry count {}"+retryCount);
+      //  retryCount++;
        User user= userService.getUser(userId);
        return ResponseEntity.ok(user);
     }
