@@ -31,3 +31,9 @@ eureka:
         defaultZone: http://localhost:8761/eureka
 
 
+okta:
+  oauth2:
+    issuer: https://dev-45141605.okta.com/oauth2/default
+    audience:  api://default
+
+
